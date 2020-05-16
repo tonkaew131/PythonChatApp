@@ -20,6 +20,15 @@ def on_new_client(conn, addr):
                 sendmsgtoeveryone("join", "join", datalist["username"], conn)
         elif (datalist["type"]=="message"):
             sendmsgtoeveryone(datalist["message"], "message",  datalist["username"], conn)
+        elif (datalist["type"]=="exit"):
+            sendmsgtoeveryone("", "exit",  datalist["username"], conn)
+            conn.close()
+        elif (datalist["type"]=="list"):
+            conn.send(pickle.dumps({
+                    "type": "list",
+                    "username": datalist["username"],
+                    "list": ", ".join(userlist)
+            }))
     conn.close()
 
 def sendmsgtoeveryone(msg, typee, username, itself):
